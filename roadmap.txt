@@ -49,3 +49,14 @@ Evaluation and Future Enhancements:
 
     Evaluate the overall success of the project based on the feedback from users and stakeholders, as well as the game's performance and usage statistics.
     Plan future enhancements and updates to add new features, improve gameplay, and incorporate any additional functionalities suggested by the users and stakeholders.
+
+
+Development Teams:
+
+    Frontend (vanilla javascript, html, css):
+        Ben
+        Leo
+    Backend (Golang / Rust?):
+        Alex
+        Chris
+        Ellis
