@@ -19,13 +19,13 @@ func GetRequest(w http.ResponseWriter, r *http.Request) {
 			ReturnModule.AccountData(w, r, accountDataStruct)
 		}
 	} else if username != "" {
-		accountDataStruct := database.GetAccountData(username)
-
-		if accountDataStruct.Username == "" {
-			ReturnModule.InternalServerError(w, r)
-		} else {
-			ReturnModule.AccountData(w, r, accountDataStruct)
-		}
+		//accountDataStruct := database.GetAccountData(username)
+		//
+		//if accountDataStruct.Username == "" {
+		//	ReturnModule.InternalServerError(w, r)
+		//} else {
+		//	ReturnModule.AccountData(w, r, accountDataStruct)
+		//}
 	} else {
 		ReturnModule.MissingData(w, r)
 	}

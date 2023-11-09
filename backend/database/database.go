@@ -3,14 +3,15 @@ package database
 import (
 	"ba-digital/backend/structs"
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	"errors"
+	_ "github.com/go-sql-driver/mysql"
 	"log"
 )
 
 var databaseConnection *sql.DB
 
 func InitializeDatabase() bool {
-	connection, databaseConnectionError := sql.Open("sqlite3", "database.db")
+	connection, databaseConnectionError := sql.Open("mysql", "admin:oqc>Tn/{'97^9ngt@tcp(35.246.102.65:3306)/t_users")
 
 	if databaseConnectionError != nil {
 		return false
@@ -53,7 +54,7 @@ func GetAccountDataFromSession(sessionToken string) structs.UserResponse {
 
 	var username sql.NullString
 	if err := row.Scan(&username); err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			return userData
 		}
 		log.Println("Error while retrieving username:", err)
@@ -72,7 +73,7 @@ func GetAccountDataFromSession(sessionToken string) structs.UserResponse {
 	)
 
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			return userData
 		}
 		log.Println("Error while scanning data:", err)
