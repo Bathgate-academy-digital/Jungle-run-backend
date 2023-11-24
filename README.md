@@ -1,5 +1,3 @@
-The website of the Bathgate academy digital team
-
 Project Planning and Requirements Gathering:
 
     Clearly define the target audience and the age group of the children who will be participating in the maze game.
