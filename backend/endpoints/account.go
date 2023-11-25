@@ -19,7 +19,16 @@ func postRequest(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	name := r.Form.Get("name")
 	class := r.Form.Get("class")
-	score, _ := strconv.Atoi(r.Form.Get("score")) //TODO Handle error
+	if name == "" || class == "" {
+		ReturnModule.CustomError(w, r, "Bad Request: name and class cannot be empty", 400)
+		return
+	}
+	score, error := strconv.Atoi(r.Form.Get("score"))
+	if error != nil {
+		ReturnModule.CustomError(w, r, "Bad Request: score must be an int", 400)
+		return
+	}
 	newUser := structs.User{Name: name, Class: class, Score: score}
 	structs.Users = append(structs.Users, newUser)
+	ReturnModule.Success(w, r)
 }
