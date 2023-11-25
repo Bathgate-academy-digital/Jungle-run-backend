@@ -4,6 +4,7 @@ import (
 	ReturnModule "ba-digital/backend/modules/return_module"
 	"ba-digital/backend/structs"
 	"net/http"
+	"strconv"
 )
 
 func SubmitResult(w http.ResponseWriter, r *http.Request) {
@@ -16,7 +17,9 @@ func SubmitResult(w http.ResponseWriter, r *http.Request) {
 
 func postRequest(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	username := r.Form.Get("username")
-	newUser := structs.UserResponse{Username: username, Ranking: 3}
+	name := r.Form.Get("name")
+	class := r.Form.Get("class")
+	score, _ := strconv.Atoi(r.Form.Get("score")) //TODO Handle error
+	newUser := structs.User{Name: name, Class: class, Score: score}
 	structs.Users = append(structs.Users, newUser)
 }

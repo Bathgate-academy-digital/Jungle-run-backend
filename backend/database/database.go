@@ -46,8 +46,8 @@ func CreateTables() bool {
 	return true
 }
 
-func GetAccountDataFromSession(sessionToken string) structs.UserResponse {
-	var userData structs.UserResponse
+func GetAccountDataFromSession(sessionToken string) structs.User {
+	var userData structs.User
 
 	query := "SELECT username FROM sessions WHERE session_token = ?"
 	row := databaseConnection.QueryRow(query, sessionToken)

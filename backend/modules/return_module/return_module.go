@@ -91,7 +91,7 @@ func InternalServerError(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func AccountData(w http.ResponseWriter, r *http.Request, accountDataStruct structs.UserResponse) {
+func AccountData(w http.ResponseWriter, r *http.Request, accountDataStruct structs.User) {
 	AccountDataResponse, ErrorResponseError := json.Marshal(accountDataStruct)
 
 	if ErrorResponseError != nil {
@@ -107,7 +107,7 @@ func AccountData(w http.ResponseWriter, r *http.Request, accountDataStruct struc
 	}
 }
 
-func Leaderboard(w http.ResponseWriter, r *http.Request, leaderboard []structs.UserResponse) {
+func Leaderboard(w http.ResponseWriter, r *http.Request, leaderboard []structs.User) {
 	AccountDataResponse, ErrorResponseError := json.Marshal(leaderboard)
 
 	if ErrorResponseError != nil {
