@@ -1,15 +1,15 @@
-# Jungle game backend
+# Jungle run backend
 
 ## Usage
 To start the server run
 ```
 go run server.go
 ```
-from there, you can now open `http://localhost:8080/api/leaderboard` in your browser (it should just return an empty [] for now). Then, to add new users with scores, in the terminal run:
+you can now open `http://localhost:8080/api/leaderboard` in your browser (it should just return an empty `[]` for now). Then, to add new users with scores run:
 ```
 curl --data "name=Alex&class=6N1&score=5" http://localhost:8080/api/submit
 ```
-Now try reloading the leaderboard page and you should see that this user is now on the leaderboard.
+Try reloading the leaderboard page and you should see that this user is now on the leaderboard.
 
 ## Notes
 - For now, the data is stored in memory and not in a database.
