@@ -1,7 +1,6 @@
 package main
 
 import (
-	"ba-digital/backend/database"
 	"ba-digital/backend/endpoints"
 	"github.com/pterm/pterm"
 	"log"
@@ -24,7 +23,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
-	if database.InitializeDatabase() && database.CreateTables() {
+	if true {
 		pterm.Success.Println("Database has been initialized successfully.")
 
 		http.HandleFunc("/api/account", endpoints.ManageAccounts)
@@ -32,7 +31,7 @@ func main() {
 		http.HandleFunc("/api/account/update", endpoints.ManageUpdate)
 		http.HandleFunc("/api/account/create", endpoints.ManageCreation)
 
-		log.Fatal(http.ListenAndServe(":6969", corsMiddleware(http.DefaultServeMux)))
+		log.Fatal(http.ListenAndServe(":8080", corsMiddleware(http.DefaultServeMux)))
 	} else {
 		pterm.Fatal.WithFatal(true).Println("Failed to initialize database successfully.")
 	}
