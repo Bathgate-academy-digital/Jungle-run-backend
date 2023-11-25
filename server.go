@@ -26,8 +26,8 @@ func main() {
 	if true {
 		pterm.Success.Println("Database has been initialized successfully.")
 
-		http.HandleFunc("/api/account", endpoints.ManageAccounts)
-		http.HandleFunc("/api/account/session", endpoints.ManageSessions)
+		http.HandleFunc("/api/submit", endpoints.SubmitResult)
+		http.HandleFunc("/api/leaderboard", endpoints.GetLeaderboard)
 		http.HandleFunc("/api/account/update", endpoints.ManageUpdate)
 		http.HandleFunc("/api/account/create", endpoints.ManageCreation)
 

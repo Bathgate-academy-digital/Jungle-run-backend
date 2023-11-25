@@ -9,21 +9,9 @@ import (
 	"net/http"
 )
 
-func ManageAccounts(w http.ResponseWriter, r *http.Request) {
+func SubmitResult(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		//account.PostRequest(w, r)
-	} else if r.Method == "GET" {
-		account.GetRequest(w, r)
-	} else if r.Method == "DELETE" {
-		//account.DeleteRequest(w, r)
-	} else {
-		ReturnModule.MethodNotAllowed(w, r)
-	}
-}
-
-func ManageSessions(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		//session.GetRequest(w, r)
+		account.PostRequest(w, r)
 	} else {
 		ReturnModule.MethodNotAllowed(w, r)
 	}

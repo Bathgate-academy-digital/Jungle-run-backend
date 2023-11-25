@@ -107,6 +107,22 @@ func AccountData(w http.ResponseWriter, r *http.Request, accountDataStruct struc
 	}
 }
 
+func Leaderboard(w http.ResponseWriter, r *http.Request, leaderboard []structs.UserResponse) {
+	AccountDataResponse, ErrorResponseError := json.Marshal(leaderboard)
+
+	if ErrorResponseError != nil {
+		log.Fatal(ErrorResponseError)
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+	_, ResponseWriterError := w.Write(AccountDataResponse)
+
+	if ResponseWriterError != nil {
+		log.Fatal(ResponseWriterError)
+	}
+}
+
 func Success(w http.ResponseWriter, r *http.Request) {
 	SuccessResponse := structs.SuccessResponse{
 		Success: true,

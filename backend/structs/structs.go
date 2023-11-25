@@ -18,3 +18,7 @@ type UserResponse struct {
 	Username string `json:"username"`
 	Ranking  int    `json:"ranking"`
 }
+
+var Users = []UserResponse{
+	{Username: "Alex", Ranking: 3},
+}
