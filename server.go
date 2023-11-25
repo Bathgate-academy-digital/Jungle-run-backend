@@ -28,8 +28,6 @@ func main() {
 
 		http.HandleFunc("/api/submit", endpoints.SubmitResult)
 		http.HandleFunc("/api/leaderboard", endpoints.GetLeaderboard)
-		http.HandleFunc("/api/account/update", endpoints.ManageUpdate)
-		http.HandleFunc("/api/account/create", endpoints.ManageCreation)
 
 		log.Fatal(http.ListenAndServe(":8080", corsMiddleware(http.DefaultServeMux)))
 	} else {
