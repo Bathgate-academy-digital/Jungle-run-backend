@@ -3,92 +3,70 @@ package database
 import (
 	"ba-digital/backend/structs"
 	"database/sql"
-	"errors"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 )
 
-var databaseConnection *sql.DB
+var db *sql.DB
 
 func InitializeDatabase() bool {
-	connection, databaseConnectionError := sql.Open("mysql", "admin:oqc>Tn/{'97^9ngt@tcp(35.246.102.65:3306)/t_users")
-
-	if databaseConnectionError != nil {
+	openDatabase, err := sql.Open("sqlite3", "sqlite.db")
+	if err != nil {
 		return false
-	} else {
-		databaseConnection = connection
-		return true
 	}
+
+	db = openDatabase
+	return true
 }
 
 func CreateTables() bool {
-	_, err := databaseConnection.Exec(`
-		CREATE TABLE IF NOT EXISTS accounts (
-			username VARCHAR(40) PRIMARY KEY,
-			rank INT,
-			password_hash VARCHAR(255),
-			password_salt VARCHAR(25)
-		);
-			
-
-		CREATE TABLE IF NOT EXISTS sessions (
-			username VARCHAR(40),
-			session_token VARCHAR(255),
-			FOREIGN KEY (username) REFERENCES accounts(username)
-		);
-
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS users(
+			id INT PRIMARY KEY,
+			name TEXT,
+			class TEXT,
+			score INT
+		) STRICT;
 	`)
 
 	if err != nil {
 		return false
 	}
-
 	return true
 }
 
-func GetAccountDataFromSession(sessionToken string) structs.User {
-	var userData structs.User
-
-	query := "SELECT username FROM sessions WHERE session_token = ?"
-	row := databaseConnection.QueryRow(query, sessionToken)
-
-	var username sql.NullString
-	if err := row.Scan(&username); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return userData
-		}
-		log.Println("Error while retrieving username:", err)
-		return userData
+func GetLeaderboard() []structs.User {
+	rows, err := db.Query("SELECT name, class, score FROM users ORDER BY score DESC")
+	if err != nil {
+		log.Fatal(err)
 	}
+	defer rows.Close()
 
-	if !username.Valid {
-		return userData
-	}
-
-	row = databaseConnection.QueryRow("SELECT username, ranking FROM accounts WHERE username = ?", username)
-
-	err := row.Scan(
-		&userData.Username,
-		&userData.Ranking,
+	output := []structs.User{}
+	var (
+		name  string
+		class string
+		score int
 	)
-
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return userData
+	for rows.Next() {
+		err := rows.Scan(&name, &class, &score)
+		if err != nil {
+			log.Fatal(err)
 		}
-		log.Println("Error while scanning data:", err)
-		return userData
+		user := structs.User{Name: name, Class: class, Score: score}
+		output = append(output, user)
 	}
-
-	row = databaseConnection.QueryRow("SELECT profile_picture, description, location, skills, interests, spoken_languages FROM profile_data WHERE username = ?", username)
-
+	err = rows.Err()
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return userData
-		}
-		log.Println("Error while scanning data:", err)
-		return userData
+		log.Fatal(err)
 	}
+	return output
+}
 
-	return userData
+func SubmitResult(id int, name string, class string, score int) {
+	query := "INSERT INTO users(id, name, class, score) VALUES (?, ?, ?, ?)"
+	_, err := db.Exec(query, id, name, class, score)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

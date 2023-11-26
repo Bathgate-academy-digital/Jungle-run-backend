@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ba-digital/backend/database"
 	"ba-digital/backend/endpoints"
 	"github.com/pterm/pterm"
 	"log"
@@ -23,7 +24,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
-	if true {
+	if database.InitializeDatabase() && database.CreateTables() {
 		pterm.Success.Println("Database has been initialized successfully.")
 
 		http.HandleFunc("/api/submit", endpoints.SubmitResult)

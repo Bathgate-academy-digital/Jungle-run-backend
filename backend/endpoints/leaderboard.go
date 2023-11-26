@@ -1,8 +1,8 @@
 package endpoints
 
 import (
+	"ba-digital/backend/database"
 	ReturnModule "ba-digital/backend/modules/return_module"
-	"ba-digital/backend/structs"
 	"net/http"
 )
 
@@ -15,5 +15,5 @@ func GetLeaderboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func getRequest(w http.ResponseWriter, r *http.Request) {
-	ReturnModule.Leaderboard(w, r, structs.Users)
+	ReturnModule.Leaderboard(w, r, database.GetLeaderboard())
 }

@@ -1,8 +1,9 @@
 package endpoints
 
 import (
+	"ba-digital/backend/database"
 	ReturnModule "ba-digital/backend/modules/return_module"
-	"ba-digital/backend/structs"
+	"math/rand"
 	"net/http"
 	"strconv"
 )
@@ -28,7 +29,6 @@ func postRequest(w http.ResponseWriter, r *http.Request) {
 		ReturnModule.CustomError(w, r, "Bad Request: score must be an int", 400)
 		return
 	}
-	newUser := structs.User{Name: name, Class: class, Score: score}
-	structs.Users = append(structs.Users, newUser)
+	database.SubmitResult(rand.Int(), name, class, score)
 	ReturnModule.Success(w, r)
 }
