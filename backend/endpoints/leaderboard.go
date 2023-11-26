@@ -8,12 +8,8 @@ import (
 
 func GetLeaderboard(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		getRequest(w, r)
+		ReturnModule.Leaderboard(w, r, database.GetLeaderboard())
 	} else {
 		ReturnModule.MethodNotAllowed(w, r)
 	}
-}
-
-func getRequest(w http.ResponseWriter, r *http.Request) {
-	ReturnModule.Leaderboard(w, r, database.GetLeaderboard())
 }

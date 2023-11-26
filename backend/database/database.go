@@ -3,8 +3,9 @@ package database
 import (
 	"ba-digital/backend/structs"
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
 	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var db *sql.DB
@@ -69,4 +70,14 @@ func SubmitResult(id int, name string, class string, score int) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func UpdateUser(name string, class string, score int) error {
+	query := "UPDATE users SET class=?, score=? WHERE name=?"
+	_, err := db.Exec(query, class, score, name)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	return nil
 }

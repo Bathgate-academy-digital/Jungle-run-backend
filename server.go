@@ -3,9 +3,10 @@ package main
 import (
 	"ba-digital/backend/database"
 	"ba-digital/backend/endpoints"
-	"github.com/pterm/pterm"
 	"log"
 	"net/http"
+
+	"github.com/pterm/pterm"
 )
 
 func corsMiddleware(next http.Handler) http.Handler {
@@ -29,6 +30,7 @@ func main() {
 
 		http.HandleFunc("/api/submit", endpoints.SubmitResult)
 		http.HandleFunc("/api/leaderboard", endpoints.GetLeaderboard)
+		http.HandleFunc("/api/update", endpoints.Update)
 
 		log.Fatal(http.ListenAndServe(":8080", corsMiddleware(http.DefaultServeMux)))
 	} else {
