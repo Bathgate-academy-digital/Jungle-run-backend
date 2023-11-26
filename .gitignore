@@ -1,0 +1,2 @@
+# A fresh sqlite is generate if one does not exist on startup
+sqlite.db
