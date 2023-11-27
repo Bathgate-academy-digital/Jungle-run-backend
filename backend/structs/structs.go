@@ -9,10 +9,12 @@ type SuccessResponse struct {
 	Success bool `json:"success"`
 }
 
+type IdResponse struct {
+	Id int `json:"id"`
+}
+
 type User struct {
 	Name  string `json:"name"`
 	Class string `json:"class"`
 	Score int    `json:"score"`
 }
-
-var Users = []User{}

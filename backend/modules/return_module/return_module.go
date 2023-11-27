@@ -91,8 +91,9 @@ func InternalServerError(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func AccountData(w http.ResponseWriter, r *http.Request, accountDataStruct structs.User) {
-	AccountDataResponse, ErrorResponseError := json.Marshal(accountDataStruct)
+func ID(w http.ResponseWriter, r *http.Request, id int) {
+	IdResponse := structs.IdResponse{Id: id}
+	AccountDataResponse, ErrorResponseError := json.Marshal(IdResponse)
 
 	if ErrorResponseError != nil {
 		log.Fatal(ErrorResponseError)

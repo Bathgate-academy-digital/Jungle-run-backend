@@ -31,5 +31,5 @@ func SubmitResult(w http.ResponseWriter, r *http.Request) {
 	// Limit of PostgreSQL int https://www.postgresql.org/docs/15/datatype-numeric.html
 	randomId := rand.Intn(2147483647)
 	database.SubmitResult(randomId, name, class, score)
-	ReturnModule.Success(w, r)
+	ReturnModule.ID(w, r, randomId)
 }

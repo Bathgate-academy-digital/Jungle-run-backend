@@ -74,9 +74,9 @@ func SubmitResult(id int, name string, class string, score int) {
 	}
 }
 
-func UpdateUser(name string, class string, score int) error {
-	query := "UPDATE users SET class=$1, score=$2 WHERE name=$3"
-	_, err := db.Exec(query, class, score, name)
+func UpdateUser(id int, score int) error {
+	query := "UPDATE users SET score=$1 WHERE id=$2"
+	_, err := db.Exec(query, score, id)
 	if err != nil {
 		log.Fatal(err)
 		return err
