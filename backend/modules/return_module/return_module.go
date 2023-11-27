@@ -7,139 +7,52 @@ import (
 	"net/http"
 )
 
-func CustomError(w http.ResponseWriter, r *http.Request, ErrorMessage string, ErrorCode int) {
-	ErrorResponse := structs.ErrorResponse{
-		ErrorCode:    ErrorCode,
-		ErrorMessage: ErrorMessage,
+func respond(w http.ResponseWriter, r *http.Request, jsonObject any, statusCode int) {
+	responseContent, err := json.Marshal(jsonObject)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	ErrorResponseMarshal, ErrorResponseError := json.Marshal(ErrorResponse)
-
-	if ErrorResponseError != nil {
-		log.Fatal(ErrorResponseError)
+	w.WriteHeader(statusCode)
+	_, err = w.Write(responseContent)
+	if err != nil {
+		log.Fatal(err)
 	}
+}
 
-	w.WriteHeader(ErrorCode)
-
-	_, ResponseWriterError := w.Write(ErrorResponseMarshal)
-
-	if ResponseWriterError != nil {
-		log.Fatal(ResponseWriterError)
+func CustomError(w http.ResponseWriter, r *http.Request, errorMessage string, errorCode int) {
+	errorResponse := structs.ErrorResponse{
+		ErrorCode:    errorCode,
+		ErrorMessage: errorMessage,
 	}
+	respond(w, r, errorResponse, errorCode)
 }
 
 func MethodNotAllowed(w http.ResponseWriter, r *http.Request) {
-	ErrorResponse := structs.ErrorResponse{
-		ErrorCode:    http.StatusMethodNotAllowed,
-		ErrorMessage: "That method is not accepted at this endpoint.",
-	}
-
-	ErrorResponseMarshal, ErrorResponseError := json.Marshal(ErrorResponse)
-
-	if ErrorResponseError != nil {
-		log.Fatal(ErrorResponseError)
-	}
-
-	w.WriteHeader(http.StatusMethodNotAllowed)
-
-	_, ResponseWriterError := w.Write(ErrorResponseMarshal)
-
-	if ResponseWriterError != nil {
-		log.Fatal(ResponseWriterError)
-	}
+	errorMessage := "That method is not accepted at this endpoint."
+	CustomError(w, r, errorMessage, http.StatusMethodNotAllowed)
 }
 
 func MissingData(w http.ResponseWriter, r *http.Request) {
-	ErrorResponse := structs.ErrorResponse{
-		ErrorCode:    http.StatusBadRequest,
-		ErrorMessage: "There was missing data inside the request.",
-	}
-
-	ErrorResponseMarshal, ErrorResponseError := json.Marshal(ErrorResponse)
-
-	if ErrorResponseError != nil {
-		log.Fatal(ErrorResponseError)
-	}
-
-	w.WriteHeader(http.StatusBadRequest)
-
-	_, ResponseWriterError := w.Write(ErrorResponseMarshal)
-
-	if ResponseWriterError != nil {
-		log.Fatal(ResponseWriterError)
-	}
+	errorMessage := "There was missing data inside the request."
+	CustomError(w, r, errorMessage, http.StatusBadRequest)
 }
 
 func InternalServerError(w http.ResponseWriter, r *http.Request) {
-	ErrorResponse := structs.ErrorResponse{
-		ErrorCode:    http.StatusInternalServerError,
-		ErrorMessage: "There was an internal server error while trying to handle your request.",
-	}
-
-	ErrorResponseMarshal, ErrorResponseError := json.Marshal(ErrorResponse)
-
-	if ErrorResponseError != nil {
-		log.Fatal(ErrorResponseError)
-	}
-
-	w.WriteHeader(http.StatusInternalServerError)
-
-	_, ResponseWriterError := w.Write(ErrorResponseMarshal)
-
-	if ResponseWriterError != nil {
-		log.Fatal(ResponseWriterError)
-	}
+	errorMessage := "There was an internal server error while trying to handle your request."
+	CustomError(w, r, errorMessage, http.StatusInternalServerError)
 }
 
 func ID(w http.ResponseWriter, r *http.Request, id int) {
-	IdResponse := structs.IdResponse{Id: id}
-	AccountDataResponse, ErrorResponseError := json.Marshal(IdResponse)
-
-	if ErrorResponseError != nil {
-		log.Fatal(ErrorResponseError)
-	}
-
-	w.WriteHeader(http.StatusOK)
-
-	_, ResponseWriterError := w.Write(AccountDataResponse)
-
-	if ResponseWriterError != nil {
-		log.Fatal(ResponseWriterError)
-	}
+	idResponse := structs.IdResponse{Id: id}
+	respond(w, r, idResponse, http.StatusOK)
 }
 
 func Leaderboard(w http.ResponseWriter, r *http.Request, leaderboard []structs.User) {
-	AccountDataResponse, ErrorResponseError := json.Marshal(leaderboard)
-
-	if ErrorResponseError != nil {
-		log.Fatal(ErrorResponseError)
-	}
-
-	w.WriteHeader(http.StatusOK)
-
-	_, ResponseWriterError := w.Write(AccountDataResponse)
-
-	if ResponseWriterError != nil {
-		log.Fatal(ResponseWriterError)
-	}
+	respond(w, r, leaderboard, http.StatusOK)
 }
 
 func Success(w http.ResponseWriter, r *http.Request) {
-	SuccessResponse := structs.SuccessResponse{
-		Success: true,
-	}
-
-	SuccessResponseMarshal, ErrorResponseError := json.Marshal(SuccessResponse)
-
-	if ErrorResponseError != nil {
-		log.Fatal(ErrorResponseError)
-	}
-
-	w.WriteHeader(http.StatusOK)
-
-	_, ResponseWriterError := w.Write(SuccessResponseMarshal)
-
-	if ResponseWriterError != nil {
-		log.Fatal(ResponseWriterError)
-	}
+	successResponse := structs.SuccessResponse{Success: true}
+	respond(w, r, successResponse, http.StatusOK)
 }
