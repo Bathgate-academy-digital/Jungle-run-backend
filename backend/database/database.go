@@ -5,13 +5,14 @@ import (
 	"database/sql"
 	"log"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
 var db *sql.DB
 
 func InitializeDatabase() bool {
-	openDatabase, err := sql.Open("sqlite3", "sqlite.db")
+	connectString := "host=localhost port=5432 user=postgres password=<password> dbname=leaderboard sslmode=disable"
+	openDatabase, err := sql.Open("postgres", connectString)
 	if err != nil {
 		return false
 	}
@@ -27,10 +28,11 @@ func CreateTables() bool {
 			name TEXT,
 			class TEXT,
 			score INT
-		) STRICT;
+		);
 	`)
 
 	if err != nil {
+		log.Fatal(err)
 		return false
 	}
 	return true
@@ -65,7 +67,7 @@ func GetLeaderboard() []structs.User {
 }
 
 func SubmitResult(id int, name string, class string, score int) {
-	query := "INSERT INTO users(id, name, class, score) VALUES (?, ?, ?, ?)"
+	query := "INSERT INTO users(id, name, class, score) VALUES ($1, $2, $3, $4)"
 	_, err := db.Exec(query, id, name, class, score)
 	if err != nil {
 		log.Fatal(err)
@@ -73,7 +75,7 @@ func SubmitResult(id int, name string, class string, score int) {
 }
 
 func UpdateUser(name string, class string, score int) error {
-	query := "UPDATE users SET class=?, score=? WHERE name=?"
+	query := "UPDATE users SET class=$1, score=$2 WHERE name=$3"
 	_, err := db.Exec(query, class, score, name)
 	if err != nil {
 		log.Fatal(err)

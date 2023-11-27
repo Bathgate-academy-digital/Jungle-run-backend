@@ -28,6 +28,8 @@ func SubmitResult(w http.ResponseWriter, r *http.Request) {
 		ReturnModule.CustomError(w, r, "Bad Request: score must be an int", 400)
 		return
 	}
-	database.SubmitResult(rand.Int(), name, class, score)
+	// Limit of PostgreSQL int https://www.postgresql.org/docs/15/datatype-numeric.html
+	randomId := rand.Intn(2147483647)
+	database.SubmitResult(randomId, name, class, score)
 	ReturnModule.Success(w, r)
 }
