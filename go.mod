@@ -1,4 +1,4 @@
-module ba-digital
+module jungle-rush
 
 go 1.21rc2
 

@@ -1,8 +1,8 @@
 package database
 
 import (
-	"ba-digital/backend/structs"
 	"database/sql"
+	"jungle-rush/backend/structs"
 	"log"
 
 	_ "github.com/lib/pq"

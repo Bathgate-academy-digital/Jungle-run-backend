@@ -1,8 +1,8 @@
 package main
 
 import (
-	"ba-digital/backend/database"
-	"ba-digital/backend/endpoints"
+	"jungle-rush/backend/database"
+	"jungle-rush/backend/endpoints"
 	"log"
 	"net/http"
 

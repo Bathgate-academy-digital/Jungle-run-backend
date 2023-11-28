@@ -1,8 +1,8 @@
 package return_module
 
 import (
-	"ba-digital/backend/structs"
 	"encoding/json"
+	"jungle-rush/backend/structs"
 	"log"
 	"net/http"
 )

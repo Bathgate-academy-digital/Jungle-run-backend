@@ -1,8 +1,8 @@
 package endpoints
 
 import (
-	"ba-digital/backend/database"
-	ReturnModule "ba-digital/backend/modules/return_module"
+	"jungle-rush/backend/database"
+	ReturnModule "jungle-rush/backend/modules/return_module"
 	"math/rand"
 	"net/http"
 	"strconv"
