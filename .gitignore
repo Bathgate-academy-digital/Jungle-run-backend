@@ -1,2 +1,2 @@
-# A fresh sqlite is generate if one does not exist on startup
-sqlite.db
+# The output binary of `go build`
+/jungle-rush
