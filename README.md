@@ -1,19 +1,25 @@
 # Jungle run backend
 
 ## Usage
-To start the server run
+First, set up credentials for a PostgreSQL server
+```
+export DB_HOST="127.0.0.1" 
+export DB_NAME="leaderdboard" 
+export DB_USER="<username>"
+export DB_PASS="<password>"
+```
+
+Then, to start the server run
 ```
 go run server.go
 ```
-you can now open `http://localhost:8080/api/leaderboard` in your browser (it should just return an empty `[]` for now). Then, to add new users with scores run:
+you can now open `http://localhost:8080/api/leaderboard` in your browser (it should just return an empty `[]` for now). To add new users with scores run
 ```
-curl --data "name=Alex&class=6N1&score=5" http://localhost:8080/api/submit
+curl --data "name=Colin&class=5N2&score=0" http://localhost:8080/api/submit
 ```
-Try reloading the leaderboard page and you should see that this user is now on the leaderboard.
+This will return an ID, keep this for later. Try reloading the leaderboard page and you should see that this user is now on the leaderboard!
+
+You can now update the score by using the ID you just obtained (this will update only existing users - NOT create new users)
 ```
-curl --data "name=Chris&class=5N2&score=10" http://localhost:8080/api/update
+curl --data "id=123456&score=5" http://localhost:8080/api/update
 ```
-This will update only existing users - will NOT work when making data
-```
-## Notes
-- Currently, this is designed so that at the end of the game it submits the score once, but it may be changed it the future to have a create and update endpoint so that the scores are updated in real time.

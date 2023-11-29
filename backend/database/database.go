@@ -2,8 +2,10 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"jungle-rush/backend/structs"
 	"log"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -11,7 +13,14 @@ import (
 var db *sql.DB
 
 func InitializeDatabase() bool {
-	connectString := "host=localhost port=5432 user=postgres password=<password> dbname=leaderboard sslmode=disable"
+	var (
+		dbUser = mustGetenv("DB_USER")
+		dbPwd  = mustGetenv("DB_PASS")
+		host   = mustGetenv("DB_HOST")
+		dbName = mustGetenv("DB_NAME")
+	)
+
+	connectString := fmt.Sprintf("user=%s password=%s database=%s host=%s", dbUser, dbPwd, dbName, host)
 	openDatabase, err := sql.Open("postgres", connectString)
 	if err != nil {
 		return false
@@ -19,6 +28,14 @@ func InitializeDatabase() bool {
 
 	db = openDatabase
 	return true
+}
+
+func mustGetenv(envName string) string {
+	v := os.Getenv(envName)
+	if v == "" {
+		log.Fatalf("%s environment variable not set.\n", envName)
+	}
+	return v
 }
 
 func CreateTables() bool {
