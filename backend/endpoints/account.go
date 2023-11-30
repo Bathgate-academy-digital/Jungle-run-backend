@@ -33,6 +33,16 @@ func SubmitResult(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if len(class) != 3 {
+		ReturnModule.BadRequest(w, r, "Class must be 3 characters long")
+		return
+	}
+
+	if !isValidClass(class) {
+		ReturnModule.BadRequest(w, r, "Invalid class")
+		return
+	}
+
 	score, err := strconv.Atoi(r.Form.Get("score"))
 	if err != nil {
 		ReturnModule.BadRequest(w, r, "Score must be an int")
@@ -47,6 +57,28 @@ func SubmitResult(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ReturnModule.ID(w, r, randomId)
+}
+
+func isValidClass(class string) bool {
+	file, err := os.Open("classes.txt")
+	if err != nil {
+		log.Fatalln("Error opening classes.txt file: ", err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		validClass := scanner.Text()
+		if class == validClass {
+			return true
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatalln("Error reading classes.txt file: ", err)
+	}
+
+	return false
 }
 
 func containsBadWords(name string) bool {
