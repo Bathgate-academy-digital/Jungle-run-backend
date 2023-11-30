@@ -23,3 +23,10 @@ You can now update the score by using the ID you just obtained (this will update
 ```
 curl --data "id=123456&score=5" http://localhost:8080/api/update
 ```
+
+## Security
+We have various security measures in place some of which are:
+- Class verification
+- User verification
+- Banned word filtration
+- Passwordless
