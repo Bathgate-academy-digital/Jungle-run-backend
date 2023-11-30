@@ -25,15 +25,14 @@ func corsMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
-	if database.InitializeDatabase() && database.CreateTables() {
-		pterm.Success.Println("Database has been initialized successfully.")
+	database.InitializeDatabase()
+	database.CreateTables()
 
-		http.HandleFunc("/api/submit", endpoints.SubmitResult)
-		http.HandleFunc("/api/leaderboard", endpoints.GetLeaderboard)
-		http.HandleFunc("/api/update", endpoints.Update)
+	pterm.Success.Println("Database has been initialized successfully.")
 
-		log.Fatal(http.ListenAndServe(":8080", corsMiddleware(http.DefaultServeMux)))
-	} else {
-		pterm.Fatal.WithFatal(true).Println("Failed to initialize database successfully.")
-	}
+	http.HandleFunc("/api/submit", endpoints.SubmitResult)
+	http.HandleFunc("/api/leaderboard", endpoints.GetLeaderboard)
+	http.HandleFunc("/api/update", endpoints.Update)
+
+	log.Fatal(http.ListenAndServe(":8080", corsMiddleware(http.DefaultServeMux)))
 }

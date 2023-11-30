@@ -2,9 +2,9 @@ package endpoints
 
 import (
 	"bufio"
-	"fmt"
 	"jungle-rush/backend/database"
 	ReturnModule "jungle-rush/backend/modules/return_module"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -24,33 +24,35 @@ func SubmitResult(w http.ResponseWriter, r *http.Request) {
 	class := r.Form.Get("class")
 
 	if name == "" || class == "" {
-		ReturnModule.CustomError(w, r, "Bad Request: name and class cannot be empty", 400)
+		ReturnModule.BadRequest(w, r, "Name and class cannot be empty")
 		return
 	}
 
-	// Check for bad words
 	if containsBadWords(name) {
-		ReturnModule.CustomError(w, r, "Bad Request: Name contains inappropriate words", 400)
+		ReturnModule.BadRequest(w, r, "Name contains inappropriate words")
 		return
 	}
 
 	score, err := strconv.Atoi(r.Form.Get("score"))
 	if err != nil {
-		ReturnModule.CustomError(w, r, "Bad Request: score must be an int", 400)
+		ReturnModule.BadRequest(w, r, "Score must be an int")
 		return
 	}
 
-	// Limit of PostgreSQL int https://www.postgresql.org/docs/15/datatype-numeric.html
+	// Generate random ID up to limit of PostgreSQL int https://www.postgresql.org/docs/15/datatype-numeric.html
 	randomId := rand.Intn(2147483647)
-	database.SubmitResult(randomId, name, class, score)
+	err = database.SubmitResult(randomId, name, class, score)
+	if err != nil {
+		ReturnModule.InternalServerError(w, r, "Failed to create user")
+		return
+	}
 	ReturnModule.ID(w, r, randomId)
 }
 
 func containsBadWords(name string) bool {
 	file, err := os.Open("bad_words.txt")
 	if err != nil {
-		fmt.Println("Error opening bad_words.txt file:", err)
-		return false
+		log.Fatalln("Error opening bad_words.txt file: ", err)
 	}
 	defer file.Close()
 
@@ -70,7 +72,7 @@ func containsBadWords(name string) bool {
 	}
 
 	if err := scanner.Err(); err != nil {
-		fmt.Println("Error reading bad_words.txt file:", err)
+		log.Fatalln("Error reading bad_words.txt file: ", err)
 	}
 
 	return false

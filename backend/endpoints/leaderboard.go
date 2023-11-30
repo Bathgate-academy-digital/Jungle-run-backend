@@ -7,9 +7,15 @@ import (
 )
 
 func GetLeaderboard(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		ReturnModule.Leaderboard(w, r, database.GetLeaderboard())
-	} else {
+	if r.Method != "GET" {
 		ReturnModule.MethodNotAllowed(w, r)
+		return
 	}
+
+	result := database.GetLeaderboard()
+	if result == nil {
+		ReturnModule.InternalServerError(w, r, "Error fetching leaderboard")
+		return
+	}
+	ReturnModule.Leaderboard(w, r, result)
 }

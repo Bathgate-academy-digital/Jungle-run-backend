@@ -33,13 +33,11 @@ func MethodNotAllowed(w http.ResponseWriter, r *http.Request) {
 	CustomError(w, r, errorMessage, http.StatusMethodNotAllowed)
 }
 
-func MissingData(w http.ResponseWriter, r *http.Request) {
-	errorMessage := "There was missing data inside the request."
+func BadRequest(w http.ResponseWriter, r *http.Request, errorMessage string) {
 	CustomError(w, r, errorMessage, http.StatusBadRequest)
 }
 
-func InternalServerError(w http.ResponseWriter, r *http.Request) {
-	errorMessage := "There was an internal server error while trying to handle your request."
+func InternalServerError(w http.ResponseWriter, r *http.Request, errorMessage string) {
 	CustomError(w, r, errorMessage, http.StatusInternalServerError)
 }
 

@@ -19,18 +19,18 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		ReturnModule.CustomError(w, r, "Invalid id", 400)
+		ReturnModule.BadRequest(w, r, "Invalid id")
 		return
 	}
 	score, err := strconv.Atoi(scoreStr)
 	if err != nil {
-		ReturnModule.CustomError(w, r, "Invalid score", 400)
+		ReturnModule.BadRequest(w, r, "Invalid score")
 		return
 	}
 
 	err = database.UpdateUser(id, score)
 	if err != nil {
-		ReturnModule.CustomError(w, r, "Failed to update user", 500)
+		ReturnModule.InternalServerError(w, r, "Failed to update user")
 		return
 	}
 
