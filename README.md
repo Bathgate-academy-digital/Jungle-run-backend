@@ -15,7 +15,7 @@ go run server.go
 ```
 you can now open `http://localhost:8080/api/leaderboard` in your browser (it should just return an empty `[]` for now). To add new users with scores run
 ```
-curl --data "name=Colin&class=5N2&score=0" http://localhost:8080/api/submit
+curl --data "name=Colin&class=5N2" http://localhost:8080/api/submit
 ```
 This will return an ID, keep this for later. Try reloading the leaderboard page and you should see that this user is now on the leaderboard!
 
