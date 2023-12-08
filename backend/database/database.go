@@ -14,15 +14,10 @@ var db *sql.DB
 
 func InitializeDatabase() {
 	var (
-		// dbUser = mustGetenv("DB_USER")
-		// dbPwd  = mustGetenv("DB_PASS")
-		// host   = mustGetenv("DB_HOST")
-		// dbName = mustGetenv("DB_NAME")
-
-		dbUser = "postgres"
-		dbPwd  = "uMiCE1GS0>jpNpE"
-		host   = "35.246.118.200"
-		dbName = "leaderboard"
+		dbUser = mustGetenv("DB_USER")
+		dbPwd  = mustGetenv("DB_PASS")
+		host   = mustGetenv("DB_HOST")
+		dbName = mustGetenv("DB_NAME")
 	)
 
 	connectString := fmt.Sprintf("user=%s password=%s database=%s host=%s", dbUser, dbPwd, dbName, host)
