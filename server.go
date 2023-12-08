@@ -30,7 +30,7 @@ func main() {
 
 	pterm.Success.Println("Database has been initialized successfully.")
 
-	http.HandleFunc("/api/submit", endpoints.SubmitResult)
+	http.HandleFunc("/api/create", endpoints.CreateUser)
 	http.HandleFunc("/api/leaderboard", endpoints.GetLeaderboard)
 	http.HandleFunc("/api/update", endpoints.Update)
 

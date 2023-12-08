@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func SubmitResult(w http.ResponseWriter, r *http.Request) {
+func CreateUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ReturnModule.MethodNotAllowed(w)
 		return
