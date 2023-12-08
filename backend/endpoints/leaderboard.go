@@ -8,14 +8,14 @@ import (
 
 func GetLeaderboard(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
-		ReturnModule.MethodNotAllowed(w, r)
+		ReturnModule.MethodNotAllowed(w)
 		return
 	}
 
 	result := database.GetLeaderboard()
 	if result == nil {
-		ReturnModule.InternalServerError(w, r, "Error fetching leaderboard")
+		ReturnModule.InternalServerError(w, "Error fetching leaderboard")
 		return
 	}
-	ReturnModule.Leaderboard(w, r, result)
+	ReturnModule.Leaderboard(w, result)
 }

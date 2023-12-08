@@ -14,7 +14,7 @@ import (
 
 func SubmitResult(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		ReturnModule.MethodNotAllowed(w, r)
+		ReturnModule.MethodNotAllowed(w)
 		return
 	}
 
@@ -30,27 +30,27 @@ func SubmitResult(w http.ResponseWriter, r *http.Request) {
 	const score = 0
 	err := database.SubmitResult(randomId, name, class, score)
 	if err != nil {
-		ReturnModule.InternalServerError(w, r, "Failed to create user")
+		ReturnModule.InternalServerError(w, "Failed to create user")
 		return
 	}
-	ReturnModule.ID(w, r, randomId)
+	ReturnModule.ID(w, randomId)
 }
 
 func validParams(w http.ResponseWriter, r *http.Request, name string, class string) bool {
 	if name == "" || class == "" {
-		ReturnModule.BadRequest(w, r, "Name and class cannot be empty")
+		ReturnModule.BadRequest(w, "Name and class cannot be empty")
 		return false
 	}
 	if containsBadWords(name) {
-		ReturnModule.BadRequest(w, r, "Name contains inappropriate words")
+		ReturnModule.BadRequest(w, "Name contains inappropriate words")
 		return false
 	}
 	if len(class) != 2 {
-		ReturnModule.BadRequest(w, r, "Class must be 2 characters long")
+		ReturnModule.BadRequest(w, "Class must be 2 characters long")
 		return false
 	}
 	if !isValidClass(class) {
-		ReturnModule.BadRequest(w, r, "Invalid class")
+		ReturnModule.BadRequest(w, "Invalid class")
 		return false
 	}
 	return true
