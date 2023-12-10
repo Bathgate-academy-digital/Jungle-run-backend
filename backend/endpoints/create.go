@@ -57,7 +57,7 @@ func validParams(w http.ResponseWriter, r *http.Request, name string, class stri
 }
 
 func isValidClass(class string) bool {
-	file, err := os.Open("classes.txt")
+	file, err := os.Open("data/classes.txt")
 	if err != nil {
 		log.Fatalln("Error opening classes.txt file: ", err)
 	}
@@ -79,7 +79,7 @@ func isValidClass(class string) bool {
 }
 
 func containsBadWords(name string) bool {
-	file, err := os.Open("bad_words.txt")
+	file, err := os.Open("data/bad_words.txt")
 	if err != nil {
 		log.Fatalln("Error opening bad_words.txt file: ", err)
 	}
