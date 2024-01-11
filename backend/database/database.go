@@ -52,9 +52,8 @@ func CreateTables() {
 	}
 }
 
-// Will return nil if there is an error
 func GetLeaderboard() []structs.User {
-	rows, err := db.Query("SELECT name, class, score FROM users ORDER BY score")
+	rows, err := db.Query("SELECT name, class, score FROM users ORDER BY score DESC")
 	if err != nil {
 		log.Println("Error fetching leaderboard from database:", err)
 		return nil
