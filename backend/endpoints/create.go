@@ -27,7 +27,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	// Generate random ID up to limit of PostgreSQL int https://www.postgresql.org/docs/15/datatype-numeric.html
 	randomId := rand.Intn(2147483647)
-	const score = 0
+	const score = "-1"
 	err := database.SubmitResult(randomId, name, class, score)
 	if err != nil {
 		ReturnModule.InternalServerError(w, "Failed to create user")

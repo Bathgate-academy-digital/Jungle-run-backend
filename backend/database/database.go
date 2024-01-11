@@ -6,6 +6,7 @@ import (
 	"jungle-rush/backend/structs"
 	"log"
 	"os"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -42,7 +43,7 @@ func CreateTables() {
 			id INT PRIMARY KEY,
 			name TEXT,
 			class TEXT,
-			score INT
+			score TIME
 		);
 	`)
 
@@ -53,7 +54,7 @@ func CreateTables() {
 
 // Will return nil if there is an error
 func GetLeaderboard() []structs.User {
-	rows, err := db.Query("SELECT name, class, score FROM users ORDER BY score DESC")
+	rows, err := db.Query("SELECT name, class, score FROM users ORDER BY score")
 	if err != nil {
 		log.Println("Error fetching leaderboard from database:", err)
 		return nil
@@ -64,7 +65,7 @@ func GetLeaderboard() []structs.User {
 	var (
 		name  string
 		class string
-		score int
+		score time.Time
 	)
 	for rows.Next() {
 		err := rows.Scan(&name, &class, &score)
@@ -72,7 +73,7 @@ func GetLeaderboard() []structs.User {
 			log.Println("Error scanning leaderboard row:", err)
 			return nil
 		}
-		user := structs.User{Name: name, Class: class, Score: score}
+		user := structs.User{Name: name, Class: class, Score: score.Format("15:04")}
 		output = append(output, user)
 	}
 	err = rows.Err()
@@ -83,9 +84,15 @@ func GetLeaderboard() []structs.User {
 	return output
 }
 
-func SubmitResult(id int, name string, class string, score int) error {
+func SubmitResult(id int, name string, class string, score string) error {
+	parsedScore, err := time.Parse("15:04", score)
+	if err != nil {
+		log.Printf("Error parsing score (score=%s): %s\n", score, err)
+		return err
+	}
+
 	query := "INSERT INTO users(id, name, class, score) VALUES ($1, $2, $3, $4)"
-	_, err := db.Exec(query, id, name, class, score)
+	_, err = db.Exec(query, id, name, class, parsedScore)
 	if err != nil {
 		log.Printf("Error inserting new user (name=%s class=%s): %s\n", name, class, err)
 		return err
@@ -93,9 +100,15 @@ func SubmitResult(id int, name string, class string, score int) error {
 	return nil
 }
 
-func UpdateUser(id int, score int) error {
+func UpdateUser(id int, score string) error {
+	parsedScore, err := time.Parse("15:04", score)
+	if err != nil {
+		log.Printf("Error parsing score (score=%s): %s\n", score, err)
+		return err
+	}
+
 	query := "UPDATE users SET score=$1 WHERE id=$2"
-	_, err := db.Exec(query, score, id)
+	_, err = db.Exec(query, parsedScore, id)
 	if err != nil {
 		log.Printf("Error updating user (id=%d): %s\n", id, err)
 		return err

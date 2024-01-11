@@ -16,5 +16,5 @@ type IdResponse struct {
 type User struct {
 	Name  string `json:"name"`
 	Class string `json:"class"`
-	Score int    `json:"score"`
+	Score string `json:"score"`
 }
