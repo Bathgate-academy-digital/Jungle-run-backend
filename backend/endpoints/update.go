@@ -15,7 +15,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	idStr := r.Form.Get("id")
-	scoreStr := r.Form.Get("score")
+	timeStr := r.Form.Get("time")
 
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -23,7 +23,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.UpdateUser(id, scoreStr)
+	err = database.UpdateUser(id, timeStr)
 	if err != nil {
 		ReturnModule.InternalServerError(w, "Failed to update user")
 		return
