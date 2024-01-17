@@ -72,7 +72,7 @@ func GetLeaderboard() []structs.User {
 			log.Println("Error scanning leaderboard row:", err)
 			return nil
 		}
-		user := structs.User{Name: name, Class: class, Time: time.Format("15:04")}
+		user := structs.User{Name: name, Class: class, Time: time.Format("15:04:05")}
 		output = append(output, user)
 	}
 	err = rows.Err()
