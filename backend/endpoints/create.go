@@ -44,7 +44,7 @@ func validParams(w http.ResponseWriter, r *http.Request, name string, class stri
 		ReturnModule.BadRequest(w, "Name contains inappropriate words")
 		return false
 	}
-	if len(class) != 2 {
+	if len(class) != 3 {
 		ReturnModule.BadRequest(w, "Class must be 2 characters long")
 		return false
 	}
