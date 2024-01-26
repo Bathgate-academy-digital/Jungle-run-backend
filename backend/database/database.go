@@ -53,7 +53,7 @@ func CreateTables() {
 }
 
 func GetLeaderboard() []structs.User {
-	rows, err := db.Query("SELECT name, class, time FROM users WHERE time IS NOT NULL ORDER BY time DESC")
+	rows, err := db.Query("SELECT name, class, time FROM users WHERE time IS NOT NULL ORDER BY time ASC")
 	if err != nil {
 		log.Println("Error fetching leaderboard from database:", err)
 		return nil
