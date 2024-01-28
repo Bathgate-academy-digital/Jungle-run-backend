@@ -54,3 +54,7 @@ func Success(w http.ResponseWriter, r *http.Request) {
 	successResponse := structs.SuccessResponse{Success: true}
 	respond(w, successResponse, http.StatusOK)
 }
+
+func DeleteUser(w http.ResponseWriter, user structs.User) {
+	respond(w, user, http.StatusOK)
+}
