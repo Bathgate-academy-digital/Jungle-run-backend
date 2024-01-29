@@ -54,7 +54,7 @@ func CreateTables() {
 }
 
 func GetLeaderboard() []structs.User {
-	rows, err := db.Query("SELECT name, class, time FROM users WHERE time IS NOT NULL ORDER BY time ASC")
+	rows, err := db.Query("SELECT name, class, time FROM users WHERE time IS NOT NULL ORDER BY time ASC LIMIT 15")
 	if err != nil {
 		log.Println("Error fetching leaderboard from database:", err)
 		return nil
@@ -66,6 +66,36 @@ func GetLeaderboard() []structs.User {
 		name  string
 		class string
 		time  timeModule.Time
+	)
+	for rows.Next() {
+		err := rows.Scan(&name, &class, &time)
+		if err != nil {
+			log.Println("Error scanning leaderboard row:", err)
+			return nil
+		}
+		user := structs.User{Name: name, Class: class, Time: time.Format("15:04:05")}
+		output = append(output, user)
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Println("Error processing leaderboard rows:", err)
+		return nil
+	}
+	return output
+}
+
+func GetLeaderboardByClass(class string) []structs.User {
+	rows, err := db.Query("SELECT name, class, time FROM users WHERE time IS NOT NULL AND class = $1 ORDER BY time ASC", class)
+	if err != nil {
+		log.Println("Error fetching leaderboard from database:", err)
+		return nil
+	}
+	defer rows.Close()
+
+	output := []structs.User{}
+	var (
+		name string
+		time timeModule.Time
 	)
 	for rows.Next() {
 		err := rows.Scan(&name, &class, &time)
