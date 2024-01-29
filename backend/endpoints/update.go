@@ -25,7 +25,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 	err = database.UpdateUser(id, timeStr)
 	if err != nil {
-		ReturnModule.InternalServerError(w, "Failed to update user")
+		ReturnModule.InternalServerError(w, err.Error())
 		return
 	}
 

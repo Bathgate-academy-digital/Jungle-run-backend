@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"jungle-rush/backend/structs"
 	"log"
@@ -84,6 +85,10 @@ func GetLeaderboard() []structs.User {
 }
 
 func SubmitResult(id int, name string, class string) error {
+	isAllowed := isClassAllowed(class)
+	if !isAllowed {
+		return errors.New("Class no longer allowed to submit")
+	}
 	query := "INSERT INTO users(id, name, class) VALUES ($1, $2, $3)"
 	_, err := db.Exec(query, id, name, class)
 	if err != nil {
@@ -94,6 +99,14 @@ func SubmitResult(id int, name string, class string) error {
 }
 
 func UpdateUser(id int, time string) error {
+	class, err := classFromId(id)
+	if err != nil {
+		return err
+	}
+	isAllowed := isClassAllowed(class)
+	if !isAllowed {
+		return errors.New("Class no longer allowed to submit")
+	}
 	parsedTime, err := timeModule.Parse("15:04:05", time)
 	if err != nil {
 		log.Printf("Error parsing time (time=%s): %s\n", time, err)
@@ -107,6 +120,28 @@ func UpdateUser(id int, time string) error {
 		return err
 	}
 	return nil
+}
+
+func isClassAllowed(class string) bool {
+	query := "SELECT allowed FROM allowed WHERE class=$1"
+	var isAllowed bool
+	err := db.QueryRow(query, class).Scan(&isAllowed)
+	if err != nil {
+		log.Printf("Error checking class (class=%s): %s\n", class, err)
+		return false
+	}
+	return isAllowed
+}
+
+func classFromId(id int) (string, error) {
+	query := "SELECT class FROM users WHERE id = $1"
+	var class string
+	err := db.QueryRow(query, id).Scan(&class)
+	if err != nil {
+		log.Printf("Error checking class (class=%s): %s\n", class, err)
+		return "", errors.New("User does not exist")
+	}
+	return class, nil
 }
 
 func DeleteUser(id int) error {

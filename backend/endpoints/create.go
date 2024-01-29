@@ -29,7 +29,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	randomId := rand.Intn(2147483647)
 	err := database.SubmitResult(randomId, name, class)
 	if err != nil {
-		ReturnModule.InternalServerError(w, "Failed to create user")
+		ReturnModule.InternalServerError(w, err.Error())
 		return
 	}
 	ReturnModule.ID(w, randomId)
