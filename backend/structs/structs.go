@@ -17,4 +17,5 @@ type User struct {
 	Name  string `json:"name"`
 	Class string `json:"class"`
 	Time  string `json:"time"`
+	Id    int    `json:"id"`
 }

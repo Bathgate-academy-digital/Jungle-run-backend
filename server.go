@@ -32,6 +32,7 @@ func main() {
 
 	http.HandleFunc("/api/create", endpoints.CreateUser)
 	http.HandleFunc("/api/leaderboard", endpoints.GetLeaderboard)
+	http.HandleFunc("/api/admin/leaderboard", endpoints.GetAdminLeaderboard)
 	http.HandleFunc("/api/update", endpoints.Update)
 	http.HandleFunc("/api/delete", endpoints.DeleteUser)
 
