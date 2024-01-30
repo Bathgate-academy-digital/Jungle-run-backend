@@ -1,0 +1,5 @@
+```
+go build
+docker build -t europe-west2-docker.pkg.dev/jungle-rush-412408/go-backend/jungle-rush:v1.2.0 .
+docker push europe-west2-docker.pkg.dev/jungle-rush-412408/go-backend/jungle-rush:v1.2.0
+```

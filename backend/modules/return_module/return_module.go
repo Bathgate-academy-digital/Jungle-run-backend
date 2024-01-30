@@ -41,6 +41,10 @@ func InternalServerError(w http.ResponseWriter, errorMessage string) {
 	CustomError(w, errorMessage, http.StatusInternalServerError)
 }
 
+func Unauthorized(w http.ResponseWriter, errorMessage string) {
+	CustomError(w, errorMessage, http.StatusUnauthorized)
+}
+
 func ID(w http.ResponseWriter, id int) {
 	idResponse := structs.IdResponse{Id: id}
 	respond(w, idResponse, http.StatusOK)
