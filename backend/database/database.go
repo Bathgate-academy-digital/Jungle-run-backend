@@ -246,14 +246,3 @@ func DeleteUser(id int) error {
 	}
 	return nil
 }
-
-func GetUserId(name string, class string) int {
-	query := "SELECT id FROM users WHERE name = $1 AND class = $2"
-	var id int
-	err := db.QueryRow(query, name, class).Scan(&id)
-	if err != nil {
-		log.Printf("Error getting user id (name=%s class=%s): %s\n", name, class, err)
-		return -1
-	}
-	return id
-}

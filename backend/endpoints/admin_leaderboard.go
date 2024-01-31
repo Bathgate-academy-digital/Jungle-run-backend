@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	"jungle-rush/backend/database"
+	AdminModule "jungle-rush/backend/modules/admin_module"
 	ReturnModule "jungle-rush/backend/modules/return_module"
 	"jungle-rush/backend/structs"
 	"log"
@@ -13,6 +14,11 @@ func GetAdminLeaderboard(w http.ResponseWriter, r *http.Request) {
 		ReturnModule.MethodNotAllowed(w)
 		return
 	}
+	if !AdminModule.IsCorrectCreds(r) {
+		ReturnModule.Unauthorized(w, "Invalid credentials")
+		return
+	}
+
 	username, password, ok := r.BasicAuth()
 	if username != "admin" || password != "5fe88ee2442925b67c5aa328ae3c65445b66d195fef92e705360931d3c2f037b" || !ok {
 		log.Printf("Wrong credentials: username=%v password=%v", username, password)

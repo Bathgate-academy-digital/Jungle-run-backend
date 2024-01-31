@@ -3,8 +3,10 @@ package endpoints
 import (
 	"fmt"
 	"jungle-rush/backend/database"
+	AdminModule "jungle-rush/backend/modules/admin_module"
 	ReturnModule "jungle-rush/backend/modules/return_module"
 	"net/http"
+	"strconv"
 )
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
@@ -12,18 +14,21 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 		ReturnModule.MethodNotAllowed(w)
 		return
 	}
-
-	r.ParseForm()
-	fmt.Println(r.Form)
-	name := r.Form.Get("name")
-	class := r.Form.Get("class")
-	if !validParams(w, r, name, class) {
+	if !AdminModule.IsCorrectCreds(r) {
+		ReturnModule.Unauthorized(w, "Invalid credentials")
 		return
 	}
 
-	userId := database.GetUserId(name, class)
+	r.ParseForm()
+	fmt.Println(r.Form)
+	id := r.Form.Get("id")
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		ReturnModule.BadRequest(w, "id must be a number")
+		return
+	}
 
-	result := database.DeleteUser(userId)
+	result := database.DeleteUser(idInt)
 	if result != nil {
 		ReturnModule.InternalServerError(w, "Error deleting member from leaderboard")
 		return
